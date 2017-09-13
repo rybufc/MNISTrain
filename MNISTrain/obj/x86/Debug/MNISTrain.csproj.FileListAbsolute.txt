@@ -1,0 +1,7 @@
+C:\Users\Антон\documents\visual studio 2010\Projects\MNISTrain\MNISTrain\obj\x86\Debug\MNISTrain.DigitImage.resources
+C:\Users\Антон\documents\visual studio 2010\Projects\MNISTrain\MNISTrain\obj\x86\Debug\MNISTrain.Properties.Resources.resources
+C:\Users\Антон\documents\visual studio 2010\Projects\MNISTrain\MNISTrain\obj\x86\Debug\MNISTrain.csproj.GenerateResource.Cache
+C:\Users\Антон\documents\visual studio 2010\Projects\MNISTrain\MNISTrain\bin\Debug\MNISTrain.exe
+C:\Users\Антон\documents\visual studio 2010\Projects\MNISTrain\MNISTrain\bin\Debug\MNISTrain.pdb
+C:\Users\Антон\documents\visual studio 2010\Projects\MNISTrain\MNISTrain\obj\x86\Debug\MNISTrain.exe
+C:\Users\Антон\documents\visual studio 2010\Projects\MNISTrain\MNISTrain\obj\x86\Debug\MNISTrain.pdb
