@@ -7,17 +7,34 @@ namespace MNISTrain
 {
     public partial class Form1 : Form
     {
+        private string pixelFile = "train-images";
+        private string labelFile = "train-labels";
+        private DigitImage[] trainImages = null;
+
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
+            int nextIndex = int.Parse(textBox2.Text);
+            DigitImage currImage = trainImages[nextIndex];
 
+            int mag = int.Parse(comboBox1.SelectedItem.ToString()); // magnification
+            Bitmap bitMap = Visualisation.MakeBitmap(currImage, mag);
+            pictureBox1.Image = bitMap;
+
+            string pixelVals = Visualisation.PixelValues(currImage);
+            textBox1.Text = pixelVals;
+
+            textBox1.Text = textBox2.Text; // update curr idx from old next idz
+            textBox2.Text = (nextIndex + 1).ToString(); // ++next index
+
+            listBox1.Items.Add("Curr image index = " + textBox3.Text + " label = " + currImage.label);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }
