@@ -7,16 +7,50 @@ using System.Drawing;
 
 namespace MNISTrain
 {
-    class Visualisation
+    /// <summary>
+    /// Хранение изображения в пиксельной форме
+    /// </summary>
+    public class DigitImage
     {
-        public static int ReverseBytes(int v)
+        // an MNIST image of a '0' thru '9' digit
+        public int width {get; protected set;} // 28
+        public int height {get; protected set;} // 28
+        public byte[][] pixels {get; protected set;} // 0(white) - 255(black)
+        public byte label { get; protected set; } // '0' - '9'
+
+        /// <summary>
+        /// Конструктор - сеттер полей класса хранения изображения
+        /// <param name="pixels"> Матрица шестнадцатеричных значений пикселов изображения </param>
+        /// <param name="label"> Хз </param>
+        /// </summary>
+        public DigitImage(int width, int height, byte[][] pixels, byte label)
+        {
+            this.width = width; this.height = height;
+            this.pixels = new byte[height][];
+            for (int i = 0; i < this.pixels.Length; ++i)
+                this.pixels[i] = new byte[width];
+
+            for (int i = 0; i < height; ++i)
+                for (int j = 0; j < width; ++j)
+                    this.pixels[i][j] = pixels[i][j];
+
+            this.label = label;
+        }
+    }
+
+    /// <summary>
+    /// Получение и визуализация изображений из бд MNIST
+    /// </summary>
+    public class Visualisation
+    {
+        private int ReverseBytes(int v)
         {
             byte[] intAsBytes = BitConverter.GetBytes(v);
             Array.Reverse(intAsBytes);
             return BitConverter.ToInt32(intAsBytes, 0);
         }
 
-        public static string IntToBinaryString(int v)
+        private string IntToBinaryString(int v)
         {
             // to pretty print an int as binary
             string s = Convert.ToString(v, 2); // base 2 but without leading 0s
@@ -31,7 +65,12 @@ namespace MNISTrain
             return res;
         }
 
-        public static DigitImage[] LoadData(string pixelFile, string labelFile)
+        /// <summary>
+        /// Конструктор - сеттер полей класса хранения изображения
+        /// <param name="labelFile"> Хз </param>
+        /// <param name="pixelFile"> Изображения, заданные шестнадцатеричными пикселями </param>
+        /// </summary>
+        public DigitImage[] LoadData(string pixelFile, string labelFile)
         {
             // Load MNIST training set of 60,000 images into memory
             // remove static to access listBox1
@@ -88,7 +127,12 @@ namespace MNISTrain
             return result;
         } // LoadData
 
-        public static Bitmap MakeBitmap(DigitImage dImage, int mag)
+        /// <summary>
+        /// Конвертирование изображения в набор битов с увеличением
+        /// <param name="dImage"> Изображение </param>
+        /// <param name="mag"> Коэффициент увеличения изображения </param>
+        /// </summary>
+        public Bitmap MakeBitmap(DigitImage dImage, int mag)
         {
             // create a C# Bitmap suitable for display in a PictureBox control
             int width = dImage.width * mag;
@@ -100,9 +144,7 @@ namespace MNISTrain
                 for (int j = 0; j < dImage.width; ++j)
                 {
                     int pixelColor = 255 - dImage.pixels[i][j]; // white background, black digits
-                    //int pixelColor = dImage.pixels[i][j]; // black background, white digits
                     Color c = Color.FromArgb(pixelColor, pixelColor, pixelColor); // gray scale
-                    //Color c = Color.FromArgb(pixelColor, 0, 0); // red scale
                     SolidBrush sb = new SolidBrush(c);
                     gr.FillRectangle(sb, j * mag, i * mag, mag, mag); // fills bitmap via Graphics object
                 }
@@ -110,7 +152,11 @@ namespace MNISTrain
             return result;
         }
 
-        public static string PixelValues(DigitImage dImage)
+        /// <summary>
+        /// Вывод изображения в виде набора пикселов, заданных шестнадцатеричными числами
+        /// <param name="dImage"> Изображение </param>
+        /// </summary>
+        public string PixelValues(DigitImage dImage)
         {
             // create a string, with embedded newlines, suitable 
             // for display in a multi-line TextBox control

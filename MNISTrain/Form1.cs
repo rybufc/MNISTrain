@@ -7,9 +7,64 @@ namespace MNISTrain
 {
     public partial class Form1 : Form
     {
-        private string pixelFile = "train-images";
-        private string labelFile = "train-labels";
+        private Visualisation VL = new Visualisation();
+        /// <summary>
+        /// Имена файлов бд MNIST в ресурсах
+        /// </summary>
+        private string pixelFile = "train-images.idx3-ubyte";
+        private string labelFile = "train-labels.idx1-ubyte";
+
+        /// <summary>
+        /// Массив изображений из бд
+        /// </summary>
         private DigitImage[] trainImages = null;
+
+        /// <summary>
+        /// Автоматическая смена изображжений
+        /// <param name="checkBox"> Значение чекбокса (включение/выключение автосмены изображений) </param>
+        /// </summary>
+        private void AutoChange(object sender, EventArgs e)
+        {
+            Timer tmrShow = new Timer { Interval = 1000 };
+
+            if (checkBox1.Checked)
+                tmrShow.Enabled = true;
+
+            tmrShow.Tick += delegate
+            {
+                ChangeImage(sender, e);
+
+                if (!checkBox1.Checked)
+                    tmrShow.Enabled = false;
+            };
+        }
+
+        /// <summary>
+        /// Смена изображение на следующее (связано с полями индексов изображений)
+        /// </summary>
+        private void ChangeImage(object sender, EventArgs e)
+        {
+            // Получение индекса следующего изображения
+            int nextIndex = (int)numericUpDown2.Value;
+            DigitImage currImage = trainImages[nextIndex];
+
+            // Получение коэффициента увеличения картинки
+            int mag = int.Parse(comboBox1.SelectedItem.ToString());
+
+            // Построение изображения попиксельно
+            Bitmap bitMap = VL.MakeBitmap(currImage, mag);
+            pictureBox1.Image = bitMap;
+
+            // Вывод значений пикселов изоражений в текстовое поле
+            string pixelVals = VL.PixelValues(currImage);
+            textBox3.Text = pixelVals;
+
+            // Вывод новых индексов изображений
+            numericUpDown1.Value = numericUpDown2.Value;
+            numericUpDown2.Value = nextIndex + 1;
+
+            listBox1.Items.Add("Индекс текущего изображения = " + numericUpDown1.Value + " label = " + currImage.label);
+        }
 
         public Form1()
         {
@@ -18,48 +73,24 @@ namespace MNISTrain
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int nextIndex = int.Parse(textBox2.Text);
-            DigitImage currImage = trainImages[nextIndex];
-
-            int mag = int.Parse(comboBox1.SelectedItem.ToString()); // magnification
-            Bitmap bitMap = Visualisation.MakeBitmap(currImage, mag);
-            pictureBox1.Image = bitMap;
-
-            string pixelVals = Visualisation.PixelValues(currImage);
-            textBox1.Text = pixelVals;
-
-            textBox1.Text = textBox2.Text; // update curr idx from old next idz
-            textBox2.Text = (nextIndex + 1).ToString(); // ++next index
-
-            listBox1.Items.Add("Curr image index = " + textBox3.Text + " label = " + currImage.label);
+            ChangeImage(sender, e);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // Загрузка изображений в память
+            this.trainImages = VL.LoadData(pixelFile, labelFile);
+            listBox1.Items.Add("Изображения загружены в память");
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
 
         }
-    }
 
-    public class DigitImage
-    {
-        // an MNIST image of a '0' thru '9' digit
-        public int width; // 28
-        public int height; // 28
-        public byte[][] pixels; // 0(white) - 255(black)
-        public byte label; // '0' - '9'
-
-        public DigitImage(int width, int height, byte[][] pixels, byte label)
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            this.width = width; this.height = height;
-            this.pixels = new byte[height][];
-            for (int i = 0; i < this.pixels.Length; ++i)
-                this.pixels[i] = new byte[width];
-
-            for (int i = 0; i < height; ++i)
-                for (int j = 0; j < width; ++j)
-                    this.pixels[i][j] = pixels[i][j];
-
-            this.label = label;
+            AutoChange(sender, e);
         }
     }
 }
