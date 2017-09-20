@@ -12,3 +12,4 @@ C:\Users\Acer\Saved Games\Desktop\MNISTrain-master\MNISTrain\bin\Debug\MNISTrain
 C:\Users\Acer\Saved Games\Desktop\MNISTrain-master\MNISTrain\bin\Debug\MNISTrain.pdb
 C:\Users\Acer\Saved Games\Desktop\MNISTrain-master\MNISTrain\obj\x86\Debug\MNISTrain.exe
 C:\Users\Acer\Saved Games\Desktop\MNISTrain-master\MNISTrain\obj\x86\Debug\MNISTrain.pdb
+C:\Users\rybufc\Desktop\PROJECT\MNISTrain\MNISTrain\obj\x86\Debug\MNISTrain.pdb
